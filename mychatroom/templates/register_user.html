@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<script type="text/javascript" src="{{static_url('js/jquery-3.4.1.js')}}" ></script>
+<script type="text/javascript" src="{{static_url('js/allfunction.js')}}"></script>
+<head>
+    <meta charset="\UTF-8">
+    <title></title>
+    <script type="text/javascript">
+                     function wang(data) {
+                        var result = send_request('user.register_user', 'account', 'password', 'name');
+                        if (result.status==0){
+                             alert("注册成功请登录");
+                             window.location.href = '/template/?template=login.html'
+                         }else {
+                             $('#show').html(result.data.msg);
+                             $("#show").css({'color':'red'})
+                         }
+                                             }
+    </script>
+</head>
+<body>
+<div>
+<h4 style="color:green;">注册后方可登陆</h4> <p id="show"></p>
+    <p>账号 : <input type="text" name="account" placeholder="字母或者数字, 20位以内"></p>
+    <p>密码 : <input type="password" name="password"></p>
+    <p>昵称 : <input type="text" name="name"></p>
+    <input type="submit" value="注册" onclick="wang()">
+    <a href="/template/?template=login.html">登陆</a>
+</div>
+</body>
+</html>

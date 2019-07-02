@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="{{static_url('js/jquery-3.4.1.js')}}" ></script>
+    <script type="text/javascript" src="{{static_url('js/allfunction.js')}}"></script>
+    <script type="text/javascript">
+        $(function () {
+        result = send_request('user.index');
+        if (result.status==0){
+            $("#is_login").html(
+                "<h5>欢迎 : "+ result.data.name+" &nbsp;&nbsp;来到聊天室</h5>"+
+                "<p><a onclick='logout()' style='color:darkred;font-size:15px;'>退出</a></p>" +
+                "<input type='hidden' name='uid' value='"+ result.data.uid+"'>"
+            );
+            $('#search').css({'display':'block'})
+        }
+    });
+        function logout() {
+            result = send_request('user.logout', 'uid');
+            location.reload();
+            if (result.status==0){
+                location.reload()
+            }
+        }
+        function get_application(){
+           result = send_request('chat.get_application');
+
+           if (result.status==0){
+               $.each(result.data.data,function (i, obj) {
+                    a = confirm('是否同意账号为:'+obj+"的用户为好友");
+                    if (a){a=1}
+                    else{a=0}
+                    send_request('chat.agree_add_friend&account='+obj+"&is_agree="+1)
+               })
+           }else{alert(result.data.msg)}
+        }
+    </script>
+</head>
+<body>
+<div id="search" style="display: none">
+    <a href="/template/?template=add_friend.html">添加好友</a>
+    <a href="#" onclick="get_application()">好友申请消息</a>
+    <a href="/template/?template=friend.html">获取好友列表 & 开始聊天</a>
+ </div>
+<p id="show"></p>
+<div id="is_login">
+    <p style="float: right;"><a href="/template/?template=register_user.html" style="font-size: 20px;color:pink;margin-left: 10px;">注册</a></p>
+    <p style="float: right;"><a href="/template/?template=login.html" style="font-size: 20px;color:green;">登录</a></p>
+    <p style="float: left;"><a href="" style="font-size: 20px;color:pink;margin-right: 10px;">来了</a></p>
+    <p style="float: left;"><a href="" style="font-size: 20px;color:green;">老弟</a></p>
+    <h2 style="text-align: center; color: red;">欢迎来到<span style="color: fuchsia;font-size: 50px;">"社会点"</span>的聊天室</h2>
+</div>
+</body>
+</html>
